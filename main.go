@@ -4,50 +4,48 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/widget"
-	"log"
-	"os"
+	"go-qn2management/repository"
+	"go-qn2management/service"
+	"go-qn2management/ui"
 )
 
 type AppConfig struct {
-	App      fyne.App
-	InfoLog  *log.Logger
-	ErrorLog *log.Logger
+	App fyne.App
 
 	MainWindow fyne.Window
-	Toolbar    *widget.Toolbar
 
 	SessionContainer *fyne.Container
 	TestContainer    *fyne.Container
 
-	SessionName *widget.Entry
+	ServiceLayer *service.Service
 
-	PreviewWidget *widget.RichText
+	SessionsTable *widget.Table
 }
 
 var appConfig AppConfig
 
 func main() {
+	mongoLayer := repository.New()
+
+	serviceLayer := service.New(mongoLayer)
+
 	// Create a fyne app
 	fyneApp := app.NewWithID("vn.flo.qnt2.preferences")
 	appConfig.App = fyneApp
-
-	// Create loggers
-	appConfig.InfoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-	appConfig.ErrorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	// Create and size a fyne window
 	appConfig.MainWindow = fyneApp.NewWindow("QN2 Management")
 	appConfig.MainWindow.Resize(fyne.Size{Width: 1200, Height: 800})
 	appConfig.MainWindow.CenterOnScreen()
 
-	// Create Menu
-	appConfig.createMenuItems(appConfig.MainWindow)
-
 	// Get user interface
-	appConfig.makeUI()
+	uiComponent := ui.New(serviceLayer)
+	uiComponent.MakeUI(appConfig.MainWindow)
 
-	// Set the content of the window
-	//appConfig.MainWindow.SetContent(container.NewHSplit(entry, preview))
+	// Create Menu
+	uiComponent.CreateMenuItems(appConfig.MainWindow)
 
 	appConfig.MainWindow.ShowAndRun()
+
+	repository.DeferDisconnect()
 }

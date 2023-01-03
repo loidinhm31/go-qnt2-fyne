@@ -1,4 +1,4 @@
-package main
+package ui
 
 import (
 	"fyne.io/fyne/v2"
@@ -6,16 +6,15 @@ import (
 	"fyne.io/fyne/v2/container"
 )
 
-func (app *AppConfig) testTab() *fyne.Container {
-	testImage := app.getImage()
+func (u *ui) testTab() *fyne.Container {
+	testImage := getImage()
 
 	testContainer := container.NewVBox(testImage)
-	app.TestContainer = testContainer
 
 	return testContainer
 }
 
-func (app *AppConfig) getImage() *canvas.Image {
+func getImage() *canvas.Image {
 	img := canvas.NewImageFromResource(resourceUnreachablePng)
 	img.SetMinSize(fyne.Size{
 		Width:  770,

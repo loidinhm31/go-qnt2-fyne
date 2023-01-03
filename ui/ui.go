@@ -1,48 +1,61 @@
-package main
+package ui
 
 import (
-	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
-	"image/color"
+	"fyne.io/fyne/v2/widget"
+	"go-qn2management/repository"
+	"go-qn2management/service"
 )
 
-func (app *AppConfig) makeUI() {
+type DrawUI struct {
+	Toolbar *widget.Toolbar
+}
 
-	grey := color.NRGBA{R: 155, G: 155, B: 155, A: 255}
+type UI interface {
+	GetAllSessions() ([]*repository.Session, error)
+}
 
-	a := canvas.NewText("a", grey)
-	b := canvas.NewText("b", grey)
-	c := canvas.NewText("c", grey)
+type ui struct {
+	service service.Service
+}
 
-	// Put information into container
-	sessionContent := container.NewGridWithColumns(4,
-		a,
-		b,
-		c,
-	)
-	app.SessionContainer = sessionContent
+var drawUI DrawUI
 
+func New(service service.Service) *ui {
+	return &ui{
+		service: service,
+	}
+}
+
+func (u *ui) MakeUI(mainWindow fyne.Window) {
 	// Get toolbar
-	toolbar := app.getToolBar(app.MainWindow)
-	app.Toolbar = toolbar
+	toolbar := u.getToolBar()
+	drawUI.Toolbar = toolbar
 
-	testTabContent := app.testTab()
+	sessionTabContent := u.sessionTab()
+	testTabContent := u.testTab()
 
 	// Get app tabs
 	tabs := container.NewAppTabs(
 		container.NewTabItemWithIcon(
 			"Session",
 			theme.HomeIcon(),
-			testTabContent),
-		container.NewTabItemWithIcon("Add Session", theme.ContentAddIcon(), canvas.NewText("Add session here", nil)),
+			sessionTabContent,
+		),
+		container.NewTabItemWithIcon(
+			"Add Session",
+			theme.ContentAddIcon(),
+			testTabContent,
+		),
 	)
 	tabs.SetTabLocation(container.TabLocationTop)
 
 	// Add container to window
-	finalContent := container.NewVBox(sessionContent, toolbar, tabs)
+	finalContent := container.NewVBox(toolbar, tabs)
 
-	app.MainWindow.SetContent(finalContent)
+	mainWindow.SetContent(finalContent)
 }
 
 //func (app *AppConfig) makeUI() (*widget.Label, *widget.Entry, *widget.Button, *widget.RichText) {

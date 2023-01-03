@@ -1,8 +1,10 @@
-package main
+package ui
 
-import "fyne.io/fyne/v2"
+import (
+	"fyne.io/fyne/v2"
+)
 
-func (app *AppConfig) createMenuItems(w fyne.Window) {
+func (u *ui) CreateMenuItems(w fyne.Window) {
 	saveMenuItem := fyne.NewMenuItem("Save", func() {})
 
 	appMenu := fyne.NewMenu("Tools", saveMenuItem)
