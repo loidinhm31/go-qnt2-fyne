@@ -1,0 +1,99 @@
+package repository
+
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/bson"
+	"log"
+	"time"
+)
+
+type SessionItem struct {
+	ID        string    `bson:"_id,omitempty" json:"id"`
+	Title     string    `bson:"title" json:"title"`
+	Extension string    `bson:"extension" json:"extension"`
+	SessionID string    `bson:"session_id" json:"session_id"`
+	CreatedAt time.Time `bson:"created_at" json:"created_at"`
+	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
+}
+
+const (
+	mongoItemsCollection = "items"
+)
+
+func (mongo *mongoRepository) FindAllItems() ([]*SessionItem, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+
+	cursor, err := collection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		log.Println("Finding all docs error:", err)
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var sessionItems []*SessionItem
+
+	for cursor.Next(ctx) {
+		var item SessionItem
+
+		err := cursor.Decode(&item)
+		if err != nil {
+			log.Println("Error decoding item into slice:", err)
+			return nil, err
+		} else {
+			sessionItems = append(sessionItems, &item)
+		}
+	}
+	return sessionItems, nil
+}
+
+func (mongo *mongoRepository) FindItemsBySessionId(sessionId string) ([]*SessionItem, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+
+	cursor, err := collection.Find(ctx,
+		bson.M{"session_id": sessionId},
+	)
+	if err != nil {
+		log.Println("Finding all docs error:", err)
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var sessionItems []*SessionItem
+
+	for cursor.Next(ctx) {
+		var item SessionItem
+
+		err := cursor.Decode(&item)
+		if err != nil {
+			log.Println("Error decoding log into slice:", err)
+			return nil, err
+		} else {
+			sessionItems = append(sessionItems, &item)
+		}
+	}
+	return sessionItems, nil
+}
+
+func (mongo *mongoRepository) InsertItem(sessionItem *SessionItem) error {
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+
+	_, err := collection.InsertOne(context.TODO(), SessionItem{
+		Title:     sessionItem.Title,
+		Extension: sessionItem.Extension,
+		SessionID: sessionItem.SessionID,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	})
+
+	if err != nil {
+		log.Println("Error inserting into sessions", err)
+		return err
+	}
+	return nil
+}

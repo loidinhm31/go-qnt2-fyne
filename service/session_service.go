@@ -32,7 +32,7 @@ func (s *service) AddSession(sessionSubmit *model.SessionSubmit) error {
 }
 
 func (s *service) GetSessionById(id string) (*repository.Session, error) {
-	session, err := s.mongoRepository.FindById(id)
+	session, err := s.mongoRepository.FindSessionById(id)
 	if err != nil {
 		log.Println(err)
 		return nil, err

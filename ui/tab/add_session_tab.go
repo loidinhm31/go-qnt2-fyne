@@ -7,7 +7,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"go-qn2management/model"
-	"go-qn2management/service"
 	"golang.org/x/image/colornames"
 	"log"
 )
@@ -50,7 +49,7 @@ func (t *tab) getSessionForm() *widget.Form {
 				SessionName: sessionNameValue.Text,
 				SessionKey:  sessionKeyValue.Text,
 			}
-			err := handleSubmit(t.service, &sessionSubmit)
+			err := t.handleSubmit(&sessionSubmit)
 			if err != nil {
 				log.Println(err)
 				return
@@ -66,9 +65,9 @@ func (t *tab) getSessionForm() *widget.Form {
 	return form
 }
 
-func handleSubmit(service service.Service, sessionSubmit *model.SessionSubmit) error {
+func (t *tab) handleSubmit(sessionSubmit *model.SessionSubmit) error {
 	// Get sessions from mongo
-	err := service.AddSession(sessionSubmit)
+	err := t.service.AddSession(sessionSubmit)
 	if err != nil {
 		return err
 	}
@@ -84,15 +83,4 @@ func getImage() *canvas.Image {
 	img.FillMode = canvas.ImageFillOriginal
 
 	return img
-}
-
-func (t *tab) refreshSessionsContent() {
-	log.Println("Refreshing...")
-
-	renderConfig := t.render.GetRenderConfig()
-	//
-	slice := t.render.GetSessionSlice()
-	t.SetSessionSlice(slice)
-	//
-	renderConfig.SessionWidget.Refresh()
 }

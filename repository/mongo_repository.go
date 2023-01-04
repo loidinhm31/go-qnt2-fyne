@@ -11,7 +11,11 @@ import (
 type MongoRepository interface {
 	FindAllSessions() ([]*Session, error)
 	InsertSession(session *Session) error
-	FindById(id string) (*Session, error)
+	FindSessionById(id string) (*Session, error)
+
+	FindAllItems() ([]*SessionItem, error)
+	FindItemsBySessionId(sessionId string) ([]*SessionItem, error)
+	InsertItem(sessionItem *SessionItem) error
 }
 
 type mongoRepository struct {
