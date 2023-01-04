@@ -32,8 +32,10 @@ func (u *ui) getSessionsTable() *widget.Table {
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
 			if i.Row == 0 {
+				header := widget.NewButton(slice[i.Row][i.Col].(string), func() {})
+				header.Importance = widget.HighImportance
 				o.(*fyne.Container).Objects = []fyne.CanvasObject{
-					widget.NewLabelWithStyle(slice[i.Row][i.Col].(string), fyne.TextAlignCenter, fyne.TextStyle{Bold: true}),
+					header,
 				}
 			} else {
 				o.(*fyne.Container).Objects = []fyne.CanvasObject{
