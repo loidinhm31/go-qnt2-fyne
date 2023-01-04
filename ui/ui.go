@@ -10,6 +10,7 @@ import (
 )
 
 type DrawUI struct {
+	AppSize fyne.Size
 	Toolbar *widget.Toolbar
 }
 
@@ -21,7 +22,7 @@ type ui struct {
 	service service.Service
 }
 
-var drawUI DrawUI
+var UIConfig DrawUI
 
 func New(service service.Service) *ui {
 	return &ui{
@@ -32,9 +33,10 @@ func New(service service.Service) *ui {
 func (u *ui) MakeUI(mainWindow fyne.Window) {
 	// Get toolbar
 	toolbar := u.getToolBar()
-	drawUI.Toolbar = toolbar
+	UIConfig.Toolbar = toolbar
 
 	sessionTabContent := u.sessionTab()
+
 	testTabContent := u.testTab()
 
 	// Get app tabs

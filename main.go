@@ -35,16 +35,18 @@ func main() {
 
 	// Create and size a fyne window
 	appConfig.MainWindow = fyneApp.NewWindow("QN2 Management")
-	appConfig.MainWindow.Resize(fyne.Size{Width: 1200, Height: 800})
-	appConfig.MainWindow.CenterOnScreen()
 
 	// Get user interface
 	uiComponent := ui.New(serviceLayer)
+	ui.UIConfig.AppSize = fyne.Size{Width: 980, Height: 760}
 	uiComponent.MakeUI(appConfig.MainWindow)
 
 	// Create Menu
 	uiComponent.CreateMenuItems(appConfig.MainWindow)
 
+	appConfig.MainWindow.Resize(ui.UIConfig.AppSize)
+	appConfig.MainWindow.CenterOnScreen()
+	appConfig.MainWindow.SetFixedSize(true)
 	appConfig.MainWindow.ShowAndRun()
 
 	repository.DeferDisconnect()

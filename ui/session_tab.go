@@ -12,13 +12,10 @@ func (u *ui) sessionTab() *fyne.Container {
 
 	sessionsTable := u.getSessionsTable()
 
-	sessionsContainer := container.NewBorder(
-		nil,
-		nil,
-		nil,
-		nil,
-		container.NewAdaptiveGrid(1, sessionsTable),
-	)
+	sessionsContainer := container.NewGridWrap(
+		UIConfig.AppSize,
+		container.NewAdaptiveGrid(1, sessionsTable))
+
 	return sessionsContainer
 }
 
@@ -34,9 +31,14 @@ func (u *ui) getSessionsTable() *widget.Table {
 			return ctr
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-
-			o.(*fyne.Container).Objects = []fyne.CanvasObject{
-				widget.NewLabel(slice[i.Row][i.Col].(string)),
+			if i.Row == 0 {
+				o.(*fyne.Container).Objects = []fyne.CanvasObject{
+					widget.NewLabelWithStyle(slice[i.Row][i.Col].(string), fyne.TextAlignCenter, fyne.TextStyle{Bold: true}),
+				}
+			} else {
+				o.(*fyne.Container).Objects = []fyne.CanvasObject{
+					widget.NewLabel(slice[i.Row][i.Col].(string)),
+				}
 			}
 		})
 

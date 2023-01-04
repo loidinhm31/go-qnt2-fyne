@@ -7,7 +7,7 @@ import (
 )
 
 func (u *ui) testTab() *fyne.Container {
-	testImage := getImage()
+	testImage := u.getSessionForm()
 
 	testContainer := container.NewVBox(testImage)
 
