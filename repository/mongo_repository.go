@@ -10,6 +10,8 @@ import (
 
 type MongoRepository interface {
 	FindAllSessions() ([]*Session, error)
+	InsertSession(session *Session) error
+	FindById(id string) (*Session, error)
 }
 
 type mongoRepository struct {

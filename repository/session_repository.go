@@ -3,15 +3,18 @@ package repository
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"time"
 )
 
 type Session struct {
-	ID          string `bson:"_id,omitempty" json:"id,omitempty"`
-	SessionName string `bson:"session_name" json:"session_name"`
-	SessionKey  string `bson:"session_key" json:"session_key"`
+	ID          string    `bson:"_id,omitempty" json:"id,omitempty"`
+	SessionName string    `bson:"session_name" json:"session_name"`
+	SessionKey  string    `bson:"session_key" json:"session_key"`
+	CreatedAt   time.Time `bson:"created_at" json:"created_at"`
+	UpdatedAt   time.Time `bson:"updated_at" json:"updated_at"`
 }
 
 const (
@@ -51,4 +54,39 @@ func (mongo *mongoRepository) FindAllSessions() ([]*Session, error) {
 		}
 	}
 	return sessions, nil
+}
+
+func (mongo *mongoRepository) InsertSession(session *Session) error {
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoCollection)
+
+	_, err := collection.InsertOne(context.TODO(), Session{
+		SessionName: session.SessionName,
+		SessionKey:  session.SessionKey,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	})
+
+	if err != nil {
+		log.Println("Error inserting into sessions", err)
+	}
+	return nil
+}
+
+func (mongo *mongoRepository) FindById(id string) (*Session, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoCollection)
+
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var session Session
+	err = collection.FindOne(ctx, bson.M{"_id": docID}).Decode(&session)
+	if err != nil {
+		return nil, err
+	}
+	return &session, nil
 }

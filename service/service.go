@@ -1,9 +1,14 @@
 package service
 
-import "go-qn2management/repository"
+import (
+	"go-qn2management/model"
+	"go-qn2management/repository"
+)
 
 type Service interface {
 	GetAllSessions() ([]*repository.Session, error)
+	AddSession(sessionSubmit *model.SessionSubmit) error
+	GetSessionById(id string) (*repository.Session, error)
 }
 
 type service struct {

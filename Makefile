@@ -20,6 +20,6 @@ clean:
 	@rm -rf ${BINARY_NAME}
 	@echo "Cleaned!"
 
-## test: runs all tests
+## coordinator: runs all tests
 test:
 	go test -v ./...

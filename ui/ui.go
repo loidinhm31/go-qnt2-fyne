@@ -4,42 +4,37 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
-	"go-qn2management/repository"
 	"go-qn2management/service"
+	"go-qn2management/ui/coordinator"
+	"go-qn2management/ui/render"
+	"go-qn2management/ui/tab"
+	toolbar "go-qn2management/ui/toolbar"
 )
-
-type DrawUI struct {
-	AppSize fyne.Size
-	Toolbar *widget.Toolbar
-}
-
-type UI interface {
-	GetAllSessions() ([]*repository.Session, error)
-}
 
 type ui struct {
 	service service.Service
+	render  render.Render
 }
 
-var UIConfig DrawUI
-
-func New(service service.Service) *ui {
+func New(service service.Service, render render.Render) *ui {
 	return &ui{
 		service: service,
+		render:  render,
 	}
 }
 
-func (u *ui) MakeUI(mainWindow fyne.Window) {
-	// Get toolbar
-	toolbar := u.getToolBar()
-	UIConfig.Toolbar = toolbar
-
-	sessionTabContent := u.sessionTab()
-
-	testTabContent := u.testTab()
-
+func (u *ui) MakeUI(render render.Render) *fyne.Container {
 	// Get app tabs
+	tabComponent := tab.New(u.service, u.render)
+	sessionTabContent := tabComponent.SessionTab()
+	addSessionContent := tabComponent.AddSessionTab()
+
+	coordinatorComponent := coordinator.New(render, tabComponent)
+
+	// Get toolbar
+	toolbarComponent := toolbar.New(u.service, u.render, coordinatorComponent)
+	toolbarRender := toolbarComponent.ToolBar()
+
 	tabs := container.NewAppTabs(
 		container.NewTabItemWithIcon(
 			"Session",
@@ -49,35 +44,13 @@ func (u *ui) MakeUI(mainWindow fyne.Window) {
 		container.NewTabItemWithIcon(
 			"Add Session",
 			theme.ContentAddIcon(),
-			testTabContent,
+			addSessionContent,
 		),
 	)
 	tabs.SetTabLocation(container.TabLocationTop)
 
 	// Add container to window
-	finalContent := container.NewVBox(toolbar, tabs)
+	finalContent := container.NewVBox(toolbarRender, tabs)
 
-	mainWindow.SetContent(finalContent)
+	return finalContent
 }
-
-//func (app *AppConfig) makeUI() (*widget.Label, *widget.Entry, *widget.Button, *widget.RichText) {
-//	outputLabel := widget.NewLabel("Session")
-//
-//	// Preview
-//	preview := widget.NewRichTextWithText("")
-//	app.PreviewWidget = preview
-//
-//	// Input
-//	entrySessionName := widget.NewEntry()
-//	app.SessionName = entrySessionName
-//
-//	entrySessionName.OnChanged = preview.ParseMarkdown
-//
-//	// Button
-//	btn := widget.NewButton("Enter", func() {
-//		app.SessionName.SetText(entrySessionName.Text)
-//	})
-//	btn.Importance = widget.HighImportance
-//
-//	return outputLabel, entrySessionName, btn, preview
-//}

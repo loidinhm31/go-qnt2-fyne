@@ -3,23 +3,14 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/widget"
 	"go-qn2management/repository"
 	"go-qn2management/service"
 	"go-qn2management/ui"
+	"go-qn2management/ui/render"
 )
 
 type AppConfig struct {
 	App fyne.App
-
-	MainWindow fyne.Window
-
-	SessionContainer *fyne.Container
-	TestContainer    *fyne.Container
-
-	ServiceLayer *service.Service
-
-	SessionsTable *widget.Table
 }
 
 var appConfig AppConfig
@@ -34,20 +25,25 @@ func main() {
 	appConfig.App = fyneApp
 
 	// Create and size a fyne window
-	appConfig.MainWindow = fyneApp.NewWindow("QN2 Management")
+	appMainWindow := fyneApp.NewWindow("QN2 Management")
 
 	// Get user interface
-	uiComponent := ui.New(serviceLayer)
-	ui.UIConfig.AppSize = fyne.Size{Width: 980, Height: 760}
-	uiComponent.MakeUI(appConfig.MainWindow)
+	renderComponent := render.New(serviceLayer)
+	uiComponent := ui.New(serviceLayer, renderComponent)
+
+	renderComponent.SetMainWindow(appMainWindow)
+	renderComponent.SetAppSize(fyne.Size{Width: 800, Height: 800})
+
+	finalContainer := uiComponent.MakeUI(renderComponent)
+	appMainWindow.SetContent(finalContainer)
 
 	// Create Menu
-	uiComponent.CreateMenuItems(appConfig.MainWindow)
+	uiComponent.CreateMenuItems()
 
-	appConfig.MainWindow.Resize(ui.UIConfig.AppSize)
-	appConfig.MainWindow.CenterOnScreen()
-	appConfig.MainWindow.SetFixedSize(true)
-	appConfig.MainWindow.ShowAndRun()
+	renderConfig := renderComponent.GetRenderConfig()
+	renderConfig.MainWindow.Resize(renderConfig.AppSize)
+	renderConfig.MainWindow.CenterOnScreen()
+	renderConfig.MainWindow.ShowAndRun()
 
 	repository.DeferDisconnect()
 }
