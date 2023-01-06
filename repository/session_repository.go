@@ -17,8 +17,6 @@ type Session struct {
 }
 
 const (
-	mongoURL                = "mongodb://mongodb:mongodbpw@localhost:27017/logs?authSource=admin"
-	mongoDB                 = "qnt2"
 	mongoSessionsCollection = "sessions"
 )
 
