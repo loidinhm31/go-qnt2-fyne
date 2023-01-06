@@ -45,4 +45,8 @@ var Messages = map[string]map[Language]string{
 		"en": "Youtube Extension",
 		"vn": "Mã Youtube",
 	},
+	"empty_value": {
+		"en": "Empty value, add value for this field",
+		"vn": "Không được để trống mục này",
+	},
 }

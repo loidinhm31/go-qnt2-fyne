@@ -15,7 +15,7 @@ import (
 func (t *toolbar) addSessionDialog() dialog.Dialog {
 	emptyValidator := func(s string) error {
 		if len(s) == 0 {
-			return errors.New("empty value, add value for this field")
+			return errors.New(i18n.Messages["empty_value"][config.GlobalConfig.Language])
 		}
 		return nil
 	}

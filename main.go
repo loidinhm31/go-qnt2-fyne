@@ -26,7 +26,7 @@ func main() {
 	// Create and size a fyne window
 	appMainWindow := fyneApp.NewWindow(i18n.Messages["qn2_management"][config.GlobalConfig.Language])
 	config.GlobalConfig.MainWindow = appMainWindow
-	config.GlobalConfig.AppSize = fyne.Size{Width: 600, Height: 600}
+	config.GlobalConfig.AppSize = fyne.Size{Width: 500, Height: 450}
 
 	// Get user interface
 	renderComponent := render.New(serviceLayer)
