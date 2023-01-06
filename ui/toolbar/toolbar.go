@@ -6,7 +6,6 @@ import (
 	"go-qn2management/service"
 	"go-qn2management/ui/coordinator"
 	"go-qn2management/ui/render"
-	"log"
 )
 
 type toolbar struct {
@@ -29,18 +28,10 @@ func (t *toolbar) ToolBar() *widget.Toolbar {
 		widget.NewToolbarAction(theme.ViewRefreshIcon(), func() {
 			t.refreshSessionsContent()
 		}),
+		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
+			t.addSessionDialog()
+		}),
 		widget.NewToolbarAction(theme.SettingsIcon(), func() {}),
 	)
-
 	return toolbar
-}
-
-func (t *toolbar) refreshSessionsContent() {
-	log.Println("Refreshing...")
-
-	slice := t.render.GetSessionSlice()
-	t.coordinator.SetSlice(slice)
-
-	renderConfig := t.render.GetRenderConfig()
-	renderConfig.SessionWidget.Refresh()
 }

@@ -32,7 +32,7 @@ func main() {
 	uiComponent := ui.New(serviceLayer, renderComponent)
 
 	renderComponent.SetMainWindow(appMainWindow)
-	renderComponent.SetAppSize(fyne.Size{Width: 1000, Height: 800})
+	renderComponent.SetAppSize(fyne.Size{Width: 600, Height: 600})
 
 	finalContainer := uiComponent.MakeUI(renderComponent)
 	appMainWindow.SetContent(finalContainer)

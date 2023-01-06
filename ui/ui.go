@@ -3,12 +3,12 @@ package ui
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 	"go-qn2management/service"
 	"go-qn2management/ui/coordinator"
 	"go-qn2management/ui/render"
-	"go-qn2management/ui/tab"
-	toolbar "go-qn2management/ui/toolbar"
+	"go-qn2management/ui/table"
+	"go-qn2management/ui/toolbar"
 )
 
 type ui struct {
@@ -25,9 +25,9 @@ func New(service service.Service, render render.Render) *ui {
 
 func (u *ui) MakeUI(render render.Render) *fyne.Container {
 	// Get app tabs
-	tabComponent := tab.New(u.service, u.render)
-	sessionTabContent := tabComponent.SessionTab()
-	addSessionContent := tabComponent.AddSessionTab()
+	tabComponent := table.New(u.service, u.render)
+	sessionTabContent := tabComponent.SessionTable()
+	//addSessionContent := tabComponent.createSessionTab()
 
 	coordinatorComponent := coordinator.New(render, tabComponent)
 
@@ -35,22 +35,10 @@ func (u *ui) MakeUI(render render.Render) *fyne.Container {
 	toolbarComponent := toolbar.New(u.service, u.render, coordinatorComponent)
 	toolbarRender := toolbarComponent.ToolBar()
 
-	tabs := container.NewAppTabs(
-		container.NewTabItemWithIcon(
-			"Session",
-			theme.HomeIcon(),
-			sessionTabContent,
-		),
-		container.NewTabItemWithIcon(
-			"Add Session",
-			theme.ContentAddIcon(),
-			addSessionContent,
-		),
-	)
-	tabs.SetTabLocation(container.TabLocationTop)
-
 	// Add container to window
-	finalContent := container.NewVBox(toolbarRender, tabs)
+	label := widget.NewLabel("Toolbox:")
+	hBox := container.NewHBox(label, toolbarRender)
+	finalContent := container.NewBorder(hBox, nil, nil, nil, sessionTabContent)
 
 	return finalContent
 }

@@ -1,4 +1,4 @@
-package tab
+package table
 
 import (
 	"errors"
@@ -18,19 +18,13 @@ type Widget struct {
 
 var SessionWidget Widget
 
-func (t *tab) SessionTab() *fyne.Container {
+func (t *tab) SessionTable() *widget.Table {
 	SessionWidget.SessionSlice = t.render.GetSessionSlice()
 
 	SessionWidget.TableWidget = t.getSessionsTable()
 	t.render.SetSessionWidget(SessionWidget.TableWidget)
 
-	sessionsContainer := container.NewGridWrap(
-		t.render.GetRenderConfig().AppSize,
-		container.NewAdaptiveGrid(1, SessionWidget.TableWidget))
-
-	//sessionsContainer := container.NewAdaptiveGrid(1, sessionsTable)
-
-	return sessionsContainer
+	return SessionWidget.TableWidget
 }
 
 func (t *tab) getSessionsTable() *widget.Table {
@@ -58,7 +52,7 @@ func (t *tab) getSessionsTable() *widget.Table {
 					if SessionWidget.SessionSlice[i.Row][i.Col] == true {
 
 						w := widget.NewButtonWithIcon("Add", theme.ContentAddIcon(), func() {
-							t.addItemsDialog(SessionWidget.SessionSlice[i.Row][0].(string))
+							t.addItemDialog(SessionWidget.SessionSlice[i.Row][0].(string))
 						})
 						w.Importance = widget.HighImportance
 
@@ -97,7 +91,7 @@ func (t *tab) getSessionsTable() *widget.Table {
 	return table
 }
 
-func (t *tab) addItemsDialog(sessionId string) dialog.Dialog {
+func (t *tab) addItemDialog(sessionId string) dialog.Dialog {
 	emptyValidator := func(s string) error {
 		if len(s) == 0 {
 			return errors.New("empty value, add value for this field")
@@ -112,7 +106,7 @@ func (t *tab) addItemsDialog(sessionId string) dialog.Dialog {
 	extension.Validator = emptyValidator
 
 	// Create a dialog
-	addForm := dialog.NewForm(
+	addItemForm := dialog.NewForm(
 		"Add Item",
 		"Add",
 		"Cancel",
@@ -133,7 +127,7 @@ func (t *tab) addItemsDialog(sessionId string) dialog.Dialog {
 					return
 				}
 
-				// Refresh sessions tab
+				// Refresh sessions table
 				t.refreshSessionsContent()
 			}
 		},
@@ -141,10 +135,10 @@ func (t *tab) addItemsDialog(sessionId string) dialog.Dialog {
 	)
 
 	// Size and show the dialog
-	addForm.Resize(fyne.Size{Width: 500})
-	addForm.Show()
+	addItemForm.Resize(fyne.Size{Width: 500})
+	addItemForm.Show()
 
-	return addForm
+	return addItemForm
 }
 
 func (t *tab) refreshSessionsContent() {

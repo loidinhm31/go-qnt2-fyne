@@ -1,4 +1,4 @@
-package tab
+package table
 
 import (
 	"go-qn2management/service"
