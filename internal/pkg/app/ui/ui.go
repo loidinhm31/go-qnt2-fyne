@@ -4,6 +4,8 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"go-qn2management/internal/pkg/app/config"
+	"go-qn2management/internal/pkg/app/i18n"
 	"go-qn2management/internal/pkg/app/service"
 	"go-qn2management/internal/pkg/app/ui/coordinator"
 	"go-qn2management/internal/pkg/app/ui/render"
@@ -27,7 +29,6 @@ func (u *ui) MakeUI(render render.Render) *fyne.Container {
 	// Get app tabs
 	tabComponent := table.New(u.service, u.render)
 	sessionTabContent := tabComponent.SessionTable()
-	//addSessionContent := tabComponent.createSessionTab()
 
 	coordinatorComponent := coordinator.New(render, tabComponent)
 
@@ -36,9 +37,15 @@ func (u *ui) MakeUI(render render.Render) *fyne.Container {
 	toolbarRender := toolbarComponent.ToolBar()
 
 	// Add container to window
-	label := widget.NewLabel("Toolbox:")
+	label := widget.NewLabel(i18n.Messages["toolbox"][config.GlobalConfig.Language])
 	hBox := container.NewHBox(label, toolbarRender)
-	finalContent := container.NewBorder(hBox, nil, nil, nil, sessionTabContent)
+	finalContent := container.NewBorder(
+		hBox,
+		nil,
+		nil,
+		nil,
+		sessionTabContent,
+	)
 
 	return finalContent
 }

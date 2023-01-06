@@ -6,6 +6,8 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+	"go-qn2management/internal/pkg/app/config"
+	"go-qn2management/internal/pkg/app/i18n"
 	"go-qn2management/internal/pkg/app/model"
 	"log"
 )
@@ -25,12 +27,12 @@ func (t *toolbar) addSessionDialog() dialog.Dialog {
 	sessionKeyValue.Validator = emptyValidator
 
 	addSessionForm := dialog.NewForm(
-		"Add Session",
-		"Add",
-		"Cancel",
+		i18n.Messages["add_session"][config.GlobalConfig.Language],
+		i18n.Messages["add"][config.GlobalConfig.Language],
+		i18n.Messages["cancel"][config.GlobalConfig.Language],
 		[]*widget.FormItem{
-			{Text: "Session Name", Widget: sessionNameValue},
-			{Text: "Session Key", Widget: sessionKeyValue},
+			{Text: i18n.Messages["session_name"][config.GlobalConfig.Language], Widget: sessionNameValue},
+			{Text: i18n.Messages["session_key"][config.GlobalConfig.Language], Widget: sessionKeyValue},
 		},
 
 		func(valid bool) { // optional, handle sessionForm submission
@@ -48,7 +50,7 @@ func (t *toolbar) addSessionDialog() dialog.Dialog {
 				t.refreshSessionsContent()
 			}
 		},
-		t.render.GetRenderConfig().MainWindow,
+		config.GlobalConfig.MainWindow,
 	)
 	// Size and show the dialog
 	addSessionForm.Resize(fyne.Size{Width: 500})

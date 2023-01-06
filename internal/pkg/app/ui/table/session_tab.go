@@ -7,6 +7,8 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"go-qn2management/internal/pkg/app/config"
+	"go-qn2management/internal/pkg/app/i18n"
 	"go-qn2management/internal/pkg/app/model"
 	"log"
 )
@@ -51,9 +53,13 @@ func (t *tab) getSessionsTable() *widget.Table {
 
 					if SessionWidget.SessionSlice[i.Row][i.Col] == true {
 
-						w := widget.NewButtonWithIcon("Add", theme.ContentAddIcon(), func() {
-							t.addItemDialog(SessionWidget.SessionSlice[i.Row][0].(string))
-						})
+						w := widget.NewButtonWithIcon(
+							i18n.Messages["add"][config.GlobalConfig.Language],
+							theme.ContentAddIcon(),
+							func() {
+								t.addItemDialog(SessionWidget.SessionSlice[i.Row][0].(string))
+							},
+						)
 						w.Importance = widget.HighImportance
 
 						o.(*fyne.Container).Objects = []fyne.CanvasObject{
@@ -107,12 +113,12 @@ func (t *tab) addItemDialog(sessionId string) dialog.Dialog {
 
 	// Create a dialog
 	addItemForm := dialog.NewForm(
-		"Add Item",
-		"Add",
-		"Cancel",
+		i18n.Messages["add_item"][config.GlobalConfig.Language],
+		i18n.Messages["add"][config.GlobalConfig.Language],
+		i18n.Messages["cancel"][config.GlobalConfig.Language],
 		[]*widget.FormItem{
-			{Text: "Title", Widget: title},
-			{Text: "Youtube extension", Widget: extension},
+			{Text: i18n.Messages["title"][config.GlobalConfig.Language], Widget: title},
+			{Text: i18n.Messages["youtube_extension"][config.GlobalConfig.Language], Widget: extension},
 		},
 
 		func(valid bool) {
@@ -131,7 +137,7 @@ func (t *tab) addItemDialog(sessionId string) dialog.Dialog {
 				t.refreshSessionsContent()
 			}
 		},
-		t.render.GetRenderConfig().MainWindow,
+		config.GlobalConfig.MainWindow,
 	)
 
 	// Size and show the dialog

@@ -1,8 +1,9 @@
 package render
 
 import (
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
+	"go-qn2management/internal/pkg/app/config"
+	"go-qn2management/internal/pkg/app/i18n"
 	"go-qn2management/internal/pkg/app/repository"
 	"go-qn2management/internal/pkg/app/service"
 	"log"
@@ -11,16 +12,12 @@ import (
 
 // Config contains all UI configs, and distribute service for components working together
 type Config struct {
-	MainWindow    fyne.Window
-	AppSize       fyne.Size
 	Toolbar       *widget.Toolbar
 	SessionWidget *widget.Table
 }
 
 type Render interface {
 	GetRenderConfig() Config
-	SetMainWindow(mainWindow fyne.Window)
-	SetAppSize(size fyne.Size)
 	SetSessionWidget(sessionWidget *widget.Table)
 	GetSessionSlice() [][]interface{}
 }
@@ -43,14 +40,6 @@ var DrawConfig Config
 
 func (r *render) GetRenderConfig() Config {
 	return DrawConfig
-}
-
-func (r *render) SetMainWindow(mainWindow fyne.Window) {
-	DrawConfig.MainWindow = mainWindow
-}
-
-func (r *render) SetAppSize(size fyne.Size) {
-	DrawConfig.AppSize = size
 }
 
 func (r *render) SetSessionWidget(widgetTable *widget.Table) {
@@ -79,7 +68,13 @@ func (r *render) GetSessionSlice() [][]interface{} {
 
 	sessionMap := make(map[string][]*repository.SessionItem)
 
-	slice = append(slice, []interface{}{"ID", "Session Name", "Session Key", "Title", "Youtube Extension", "Add Item?"})
+	slice = append(slice, []interface{}{
+		"ID",
+		i18n.Messages["session_name"][config.GlobalConfig.Language],
+		i18n.Messages["session_key"][config.GlobalConfig.Language],
+		i18n.Messages["title"][config.GlobalConfig.Language],
+		i18n.Messages["youtube_extension"][config.GlobalConfig.Language],
+		i18n.Messages["add_item"][config.GlobalConfig.Language]})
 
 	for _, session := range sessions {
 		sessionMap[session.ID] = []*repository.SessionItem{}
