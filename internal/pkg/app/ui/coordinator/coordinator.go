@@ -1,8 +1,8 @@
 package coordinator
 
 import (
-	"go-qn2management/ui/render"
-	"go-qn2management/ui/table"
+	"go-qn2management/internal/pkg/app/ui/render"
+	"go-qn2management/internal/pkg/app/ui/table"
 )
 
 // Coordinator receives config from @Render to distribute function for UI component working together

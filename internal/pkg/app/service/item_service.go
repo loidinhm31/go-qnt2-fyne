@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"go-qn2management/model"
-	"go-qn2management/repository"
+	"go-qn2management/internal/pkg/app/model"
+	"go-qn2management/internal/pkg/app/repository"
 	"log"
 )
 

@@ -6,7 +6,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-	"go-qn2management/model"
+	"go-qn2management/internal/pkg/app/model"
 	"log"
 )
 

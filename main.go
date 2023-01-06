@@ -3,10 +3,10 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"go-qn2management/repository"
-	"go-qn2management/service"
-	"go-qn2management/ui"
-	"go-qn2management/ui/render"
+	"go-qn2management/internal/pkg/app/repository"
+	"go-qn2management/internal/pkg/app/service"
+	"go-qn2management/internal/pkg/app/ui"
+	"go-qn2management/internal/pkg/app/ui/render"
 )
 
 type AppConfig struct {

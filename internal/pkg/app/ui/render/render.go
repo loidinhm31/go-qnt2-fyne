@@ -3,8 +3,8 @@ package render
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
-	"go-qn2management/repository"
-	"go-qn2management/service"
+	"go-qn2management/internal/pkg/app/repository"
+	"go-qn2management/internal/pkg/app/service"
 	"log"
 	"sort"
 )

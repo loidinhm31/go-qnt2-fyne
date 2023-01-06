@@ -1,8 +1,8 @@
 package table
 
 import (
-	"go-qn2management/service"
-	"go-qn2management/ui/render"
+	"go-qn2management/internal/pkg/app/service"
+	"go-qn2management/internal/pkg/app/ui/render"
 )
 
 type Tab interface {

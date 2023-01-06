@@ -4,11 +4,11 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"go-qn2management/service"
-	"go-qn2management/ui/coordinator"
-	"go-qn2management/ui/render"
-	"go-qn2management/ui/table"
-	"go-qn2management/ui/toolbar"
+	"go-qn2management/internal/pkg/app/service"
+	"go-qn2management/internal/pkg/app/ui/coordinator"
+	"go-qn2management/internal/pkg/app/ui/render"
+	"go-qn2management/internal/pkg/app/ui/table"
+	"go-qn2management/internal/pkg/app/ui/toolbar"
 )
 
 type ui struct {

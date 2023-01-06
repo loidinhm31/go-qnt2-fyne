@@ -3,9 +3,9 @@ package toolbar
 import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"go-qn2management/service"
-	"go-qn2management/ui/coordinator"
-	"go-qn2management/ui/render"
+	"go-qn2management/internal/pkg/app/service"
+	"go-qn2management/internal/pkg/app/ui/coordinator"
+	"go-qn2management/internal/pkg/app/ui/render"
 )
 
 type toolbar struct {
