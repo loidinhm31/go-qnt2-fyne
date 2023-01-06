@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
 )
@@ -93,6 +94,24 @@ func (mongo *mongoRepository) InsertItem(sessionItem *SessionItem) error {
 
 	if err != nil {
 		log.Println("Error inserting into sessions", err)
+		return err
+	}
+	return nil
+}
+
+func (mongo *mongoRepository) DeleteItemById(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.DeleteOne(ctx, bson.M{"_id": docID})
+	if err != nil {
 		return err
 	}
 	return nil

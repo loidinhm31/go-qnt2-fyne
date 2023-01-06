@@ -85,3 +85,21 @@ func (mongo *mongoRepository) FindSessionById(id string) (*Session, error) {
 	}
 	return &session, nil
 }
+
+func (mongo *mongoRepository) DeleteSessionById(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoSessionsCollection)
+
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.DeleteOne(ctx, bson.M{"_id": docID})
+	if err != nil {
+		return err
+	}
+	return nil
+}

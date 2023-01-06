@@ -44,3 +44,17 @@ func (s *service) GetSessionById(id string) (*repository.Session, error) {
 
 	return session, nil
 }
+
+func (s *service) RemoveSessionById(id string, sessionMap map[string][]*repository.SessionItem) error {
+	// Cannot remove the session that had items
+	if len(sessionMap[id]) > 0 {
+		return errors.New("cannot remove this session")
+	}
+
+	err := s.mongoRepository.DeleteSessionById(id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}

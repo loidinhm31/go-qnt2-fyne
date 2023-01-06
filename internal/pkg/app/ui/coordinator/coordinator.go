@@ -1,13 +1,14 @@
 package coordinator
 
 import (
+	"go-qn2management/internal/pkg/app/repository"
 	"go-qn2management/internal/pkg/app/ui/render"
 	"go-qn2management/internal/pkg/app/ui/table"
 )
 
 // Coordinator receives config from @Render to distribute function for UI component working together
 type Coordinator interface {
-	SetSlice(sessionSlice [][]interface{})
+	SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{})
 }
 
 type coordinator struct {
@@ -22,6 +23,6 @@ func New(render render.Render, tab table.Tab) *coordinator {
 	}
 }
 
-func (c *coordinator) SetSlice(sessionSlice [][]interface{}) {
-	c.tab.SetSessionSlice(sessionSlice)
+func (c *coordinator) SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{}) {
+	c.tab.SetSessionProps(sessionMap, sessionSlice)
 }

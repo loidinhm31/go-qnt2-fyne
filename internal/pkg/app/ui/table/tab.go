@@ -1,12 +1,13 @@
 package table
 
 import (
+	"go-qn2management/internal/pkg/app/repository"
 	"go-qn2management/internal/pkg/app/service"
 	"go-qn2management/internal/pkg/app/ui/render"
 )
 
 type Tab interface {
-	SetSessionSlice(sessionSlice [][]interface{})
+	SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{})
 }
 
 type tab struct {

@@ -12,10 +12,12 @@ type MongoRepository interface {
 	FindAllSessions() ([]*Session, error)
 	InsertSession(session *Session) error
 	FindSessionById(id string) (*Session, error)
+	DeleteSessionById(id string) error
 
 	FindAllItems() ([]*SessionItem, error)
 	FindItemsBySessionId(sessionId string) ([]*SessionItem, error)
 	InsertItem(sessionItem *SessionItem) error
+	DeleteItemById(id string) error
 }
 
 type mongoRepository struct {
