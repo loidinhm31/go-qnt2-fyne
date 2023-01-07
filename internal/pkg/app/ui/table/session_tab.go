@@ -143,7 +143,6 @@ func (t *tab) getSessionsTable() *widget.Table {
 					}
 				}
 			}
-			//}
 		})
 
 	colWidths := []float32{

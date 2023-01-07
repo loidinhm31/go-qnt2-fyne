@@ -35,9 +35,6 @@ func main() {
 	finalContainer := uiComponent.MakeUI(renderComponent)
 	appMainWindow.SetContent(finalContainer)
 
-	// Create Menu
-	uiComponent.CreateMenuItems()
-
 	config.GlobalConfig.MainWindow.Resize(config.GlobalConfig.AppSize)
 	config.GlobalConfig.MainWindow.CenterOnScreen()
 	config.GlobalConfig.MainWindow.ShowAndRun()
