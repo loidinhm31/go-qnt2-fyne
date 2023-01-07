@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"go-qn2management/internal/pkg/app/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
@@ -17,15 +18,11 @@ type SessionItem struct {
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
 
-const (
-	mongoItemsCollection = "items"
-)
-
 func (mongo *mongoRepository) FindAllItems() ([]*SessionItem, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoItemsCollection)
 
 	cursor, err := collection.Find(context.TODO(), bson.D{})
 	if err != nil {
@@ -54,7 +51,7 @@ func (mongo *mongoRepository) FindItemsBySessionId(sessionId string) ([]*Session
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoItemsCollection)
 
 	cursor, err := collection.Find(ctx,
 		bson.M{"session_id": sessionId},
@@ -82,7 +79,7 @@ func (mongo *mongoRepository) FindItemsBySessionId(sessionId string) ([]*Session
 }
 
 func (mongo *mongoRepository) InsertItem(sessionItem *SessionItem) error {
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoItemsCollection)
 
 	_, err := collection.InsertOne(context.TODO(), SessionItem{
 		Title:     sessionItem.Title,
@@ -103,7 +100,7 @@ func (mongo *mongoRepository) DeleteItemById(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoItemsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoItemsCollection)
 
 	docID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
