@@ -136,8 +136,9 @@ func (t *tab) getSessionsTable() *widget.Table {
 				} else {
 					val := SessionWidget.SessionSlice[cellID.Row][cellID.Col].(string)
 					l := widget.NewLabel(val)
-					//l.Wrapping = fyne.TextWrapBreak
-
+					if len(val) > 50 {
+						l.Wrapping = fyne.TextWrapWord
+					}
 					o.(*fyne.Container).Objects = []fyne.CanvasObject{
 						l,
 					}
