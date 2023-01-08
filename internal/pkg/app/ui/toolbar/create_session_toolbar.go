@@ -46,7 +46,10 @@ func (t *toolbar) addSessionDialog() dialog.Dialog {
 					log.Println(err)
 					return
 				}
-
+				dialog.ShowInformation(
+					i18n.Messages["notify_message"][config.GlobalConfig.Language],
+					i18n.Messages["update_successful"][config.GlobalConfig.Language],
+					config.GlobalConfig.MainWindow)
 				t.refreshSessionsContent()
 			}
 		},

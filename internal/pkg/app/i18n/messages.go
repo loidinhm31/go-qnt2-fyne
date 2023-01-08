@@ -21,6 +21,14 @@ var Messages = map[string]map[Language]string{
 		"en": "Add Session",
 		"vn": "Thêm Phiên",
 	},
+	"delete_session": {
+		"en": "Delete Session",
+		"vn": "Xóa Phiên",
+	},
+	"delete_session_question": {
+		"en": "Do you really want to delete this Session?",
+		"vn": "Bạn thực sự muốn xóa Phiên này?",
+	},
 	"session_name": {
 		"en": "Session Name",
 		"vn": "Tên Phiên",
@@ -41,6 +49,14 @@ var Messages = map[string]map[Language]string{
 		"en": "Cancel",
 		"vn": "Hủy",
 	},
+	"delete_item": {
+		"en": "Delete Item",
+		"vn": "Xóa Mục",
+	},
+	"delete_item_question": {
+		"en": "Do you really want to delete this Item?",
+		"vn": "Bạn thực sự muốn xóa Mục này?",
+	},
 	"youtube_extension": {
 		"en": "Youtube Extension",
 		"vn": "Mã Youtube",
@@ -48,5 +64,29 @@ var Messages = map[string]map[Language]string{
 	"empty_value": {
 		"en": "Empty value, add value for this field",
 		"vn": "Không được để trống mục này",
+	},
+	"yes": {
+		"en": "Yes",
+		"vn": "Có",
+	},
+	"no": {
+		"en": "No",
+		"vn": "Không",
+	},
+	"invalid_session": {
+		"en": "Cannot delete Session that had Items",
+		"vn": "Không thể xóa Phiên đã có các Mục",
+	},
+	"warning_message": {
+		"en": "Warning",
+		"vn": "Cảnh báo",
+	},
+	"update_successful": {
+		"en": "Successfully Update",
+		"vn": "Cập nhật thành công",
+	},
+	"notify_message": {
+		"en": "Notify",
+		"vn": "Thông báo",
 	},
 }

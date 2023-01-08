@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"go-qn2management/internal/pkg/app/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -12,10 +13,12 @@ type MongoRepository interface {
 	FindAllSessions() ([]*Session, error)
 	InsertSession(session *Session) error
 	FindSessionById(id string) (*Session, error)
+	DeleteSessionById(id string) error
 
 	FindAllItems() ([]*SessionItem, error)
 	FindItemsBySessionId(sessionId string) ([]*SessionItem, error)
 	InsertItem(sessionItem *SessionItem) error
+	DeleteItemById(id string) error
 }
 
 type mongoRepository struct {
@@ -23,11 +26,6 @@ type mongoRepository struct {
 }
 
 var mongoClient *mongo.Client
-
-const (
-	mongoURL = "mongodb://mongodb:mongodbpw@localhost:27017/?authSource=admin"
-	mongoDB  = "qnt2"
-)
 
 func New() *mongoRepository {
 	var err error
@@ -44,10 +42,10 @@ func New() *mongoRepository {
 
 func connectToMongo() (*mongo.Client, error) {
 	// create connection options
-	clientOptions := options.Client().ApplyURI(mongoURL)
+	clientOptions := options.Client().ApplyURI(config.MongoURL)
 	clientOptions.SetAuth(options.Credential{
-		Username: "mongodb",   // example, must change
-		Password: "mongodbpw", // example, must change
+		Username: config.MongoUsername,
+		Password: config.MongoPassword,
 	})
 
 	// connect to mongodb

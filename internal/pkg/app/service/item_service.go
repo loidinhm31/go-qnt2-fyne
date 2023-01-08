@@ -45,3 +45,12 @@ func (s *service) AddItem(sessionItemSubmit *model.SessionItemSubmit) error {
 	}
 	return nil
 }
+
+func (s *service) RemoveItemById(id string) error {
+	err := s.mongoRepository.DeleteItemById(id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}

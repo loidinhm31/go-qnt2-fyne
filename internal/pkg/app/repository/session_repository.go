@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"go-qn2management/internal/pkg/app/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
@@ -16,16 +17,12 @@ type Session struct {
 	UpdatedAt   time.Time `bson:"updated_at" json:"updated_at"`
 }
 
-const (
-	mongoSessionsCollection = "sessions"
-)
-
 // FindAllSessions returns all session
 func (mongo *mongoRepository) FindAllSessions() ([]*Session, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoSessionsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoSessionsCollection)
 
 	cursor, err := collection.Find(context.TODO(), bson.D{})
 	if err != nil {
@@ -51,7 +48,7 @@ func (mongo *mongoRepository) FindAllSessions() ([]*Session, error) {
 }
 
 func (mongo *mongoRepository) InsertSession(session *Session) error {
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoSessionsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoSessionsCollection)
 
 	_, err := collection.InsertOne(context.TODO(), Session{
 		SessionName: session.SessionName,
@@ -71,7 +68,7 @@ func (mongo *mongoRepository) FindSessionById(id string) (*Session, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	collection := mongo.mongoClient.Database(mongoDB).Collection(mongoSessionsCollection)
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoSessionsCollection)
 
 	docID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -84,4 +81,22 @@ func (mongo *mongoRepository) FindSessionById(id string) (*Session, error) {
 		return nil, err
 	}
 	return &session, nil
+}
+
+func (mongo *mongoRepository) DeleteSessionById(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	collection := mongo.mongoClient.Database(config.MongoDB).Collection(config.MongoSessionsCollection)
+
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	_, err = collection.DeleteOne(ctx, bson.M{"_id": docID})
+	if err != nil {
+		return err
+	}
+	return nil
 }

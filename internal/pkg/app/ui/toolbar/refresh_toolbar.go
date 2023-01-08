@@ -5,8 +5,8 @@ import "log"
 func (t *toolbar) refreshSessionsContent() {
 	log.Println("Refreshing...")
 
-	slice := t.render.GetSessionSlice()
-	t.coordinator.SetSlice(slice)
+	sessionMap, sessionSlice := t.render.GetSessionProps()
+	t.coordinator.SetSessionProps(sessionMap, sessionSlice)
 
 	renderConfig := t.render.GetRenderConfig()
 	renderConfig.SessionWidget.Refresh()

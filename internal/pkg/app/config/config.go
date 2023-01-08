@@ -13,3 +13,12 @@ type AppConfig struct {
 }
 
 var GlobalConfig AppConfig
+
+const (
+	MongoUsername           = "mongodb"   // example, must change
+	MongoPassword           = "mongodbpw" // example, must change
+	MongoURL                = "mongodb://mongodb:mongodbpw@localhost:27017/?authSource=admin"
+	MongoDB                 = "qnt2"
+	MongoSessionsCollection = "sessions"
+	MongoItemsCollection    = "items"
+)
