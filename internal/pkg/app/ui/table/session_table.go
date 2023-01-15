@@ -24,7 +24,7 @@ type Widget struct {
 
 var SessionWidget Widget
 
-func (t *tab) SessionTable() *widget.Table {
+func (t *table) SessionTable() *widget.Table {
 	SessionWidget.SessionMap, SessionWidget.SessionSlice = t.render.GetSessionProps()
 
 	SessionWidget.TableWidget = t.getSessionsTable()
@@ -33,7 +33,7 @@ func (t *tab) SessionTable() *widget.Table {
 	return SessionWidget.TableWidget
 }
 
-func (t *tab) getSessionsTable() *widget.Table {
+func (t *table) getSessionsTable() *widget.Table {
 	table := widget.NewTable(
 		func() (int, int) {
 			return len(SessionWidget.SessionSlice), len(SessionWidget.SessionSlice[0])
@@ -75,7 +75,7 @@ func (t *tab) getSessionsTable() *widget.Table {
 					o.(*fyne.Container).Objects = []fyne.CanvasObject{
 						widget.NewLabel(strconv.Itoa(itemIndex + 1)), // replace session id by item index
 					}
-				} else if cellID.Col == 2 { // First cell - put in a delete session button
+				} else if cellID.Col == 3 { // put in a delete session button
 					if SessionWidget.SessionSlice[cellID.Row][addItemColIndex] == true {
 						w := widget.NewButtonWithIcon(
 							i18n.Messages["delete_session"][config.GlobalConfig.Language],
@@ -149,6 +149,7 @@ func (t *tab) getSessionsTable() *widget.Table {
 	colWidths := []float32{
 		35,
 		35,
+		50,
 		95,
 		330,
 		100,
@@ -167,7 +168,7 @@ func (t *tab) getSessionsTable() *widget.Table {
 	return table
 }
 
-func (t *tab) addItemDialog(sessionId string) dialog.Dialog {
+func (t *table) addItemDialog(sessionId string) dialog.Dialog {
 	emptyValidator := func(s string) error {
 		if len(s) == 0 {
 			return errors.New(i18n.Messages["empty_value"][config.GlobalConfig.Language])
@@ -221,7 +222,7 @@ func (t *tab) addItemDialog(sessionId string) dialog.Dialog {
 	return addItemForm
 }
 
-func (t *tab) refreshSessionsContent() {
+func (t *table) refreshSessionsContent() {
 	log.Println("Refreshing...")
 
 	// Update sessions
@@ -232,12 +233,12 @@ func (t *tab) refreshSessionsContent() {
 	renderConfig.SessionWidget.Refresh()
 }
 
-func (t *tab) SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{}) {
+func (t *table) SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{}) {
 	SessionWidget.SessionMap = sessionMap
 	SessionWidget.SessionSlice = sessionSlice
 }
 
-func (t *tab) deleteSessionDialog(id string) {
+func (t *table) deleteSessionDialog(id string) {
 	label := widget.NewLabel(i18n.Messages["delete_session_question"][config.GlobalConfig.Language])
 
 	addItemForm := dialog.NewForm(
@@ -275,7 +276,7 @@ func (t *tab) deleteSessionDialog(id string) {
 	addItemForm.Show()
 }
 
-func (t *tab) deleteItemDialog(id string) {
+func (t *table) deleteItemDialog(id string) {
 	label := widget.NewLabel(i18n.Messages["delete_item_question"][config.GlobalConfig.Language])
 
 	addItemForm := dialog.NewForm(

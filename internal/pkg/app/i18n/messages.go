@@ -37,6 +37,10 @@ var Messages = map[string]map[Language]string{
 		"en": "Session Key",
 		"vn": "Khóa Phiên",
 	},
+	"session_order": {
+		"en": "# Session",
+		"vn": "# Phiên",
+	},
 	"add_item": {
 		"en": "Add Item",
 		"vn": "Thêm mục",

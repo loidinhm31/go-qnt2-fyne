@@ -23,6 +23,7 @@ func (s *service) AddSession(sessionSubmit *model.SessionSubmit) error {
 		session := repository.Session{
 			SessionName: sessionSubmit.SessionName,
 			SessionKey:  sessionSubmit.SessionKey,
+			Order:       sessionSubmit.SessionOrder,
 		}
 
 		err := s.mongoRepository.InsertSession(&session)

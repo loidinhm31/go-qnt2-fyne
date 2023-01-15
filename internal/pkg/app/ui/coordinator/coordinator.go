@@ -13,10 +13,10 @@ type Coordinator interface {
 
 type coordinator struct {
 	render render.Render
-	tab    table.Tab
+	tab    table.Table
 }
 
-func New(render render.Render, tab table.Tab) *coordinator {
+func New(render render.Render, tab table.Table) *coordinator {
 	return &coordinator{
 		render: render,
 		tab:    tab,

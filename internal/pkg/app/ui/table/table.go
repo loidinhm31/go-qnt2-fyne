@@ -6,17 +6,17 @@ import (
 	"go-qn2management/internal/pkg/app/ui/render"
 )
 
-type Tab interface {
+type Table interface {
 	SetSessionProps(sessionMap map[string][]*repository.SessionItem, sessionSlice [][]interface{})
 }
 
-type tab struct {
+type table struct {
 	service service.Service
 	render  render.Render
 }
 
-func New(service service.Service, render render.Render) *tab {
-	return &tab{
+func New(service service.Service, render render.Render) *table {
+	return &table{
 		service: service,
 		render:  render,
 	}

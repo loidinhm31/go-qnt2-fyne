@@ -10,6 +10,7 @@ import (
 	"go-qn2management/internal/pkg/app/i18n"
 	"go-qn2management/internal/pkg/app/model"
 	"log"
+	"strconv"
 )
 
 func (t *toolbar) addSessionDialog() dialog.Dialog {
@@ -26,6 +27,15 @@ func (t *toolbar) addSessionDialog() dialog.Dialog {
 	sessionKeyValue := widget.NewEntry()
 	sessionKeyValue.Validator = emptyValidator
 
+	sessionOrderValue := widget.NewEntry()
+	sessionOrderValue.Validator = func(s string) error {
+		_, err := strconv.Atoi(s)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
 	addSessionForm := dialog.NewForm(
 		i18n.Messages["add_session"][config.GlobalConfig.Language],
 		i18n.Messages["add"][config.GlobalConfig.Language],
@@ -33,13 +43,16 @@ func (t *toolbar) addSessionDialog() dialog.Dialog {
 		[]*widget.FormItem{
 			{Text: i18n.Messages["session_name"][config.GlobalConfig.Language], Widget: sessionNameValue},
 			{Text: i18n.Messages["session_key"][config.GlobalConfig.Language], Widget: sessionKeyValue},
+			{Text: i18n.Messages["session_order"][config.GlobalConfig.Language], Widget: sessionOrderValue},
 		},
 
 		func(valid bool) { // optional, handle sessionForm submission
 			if valid {
+				order, _ := strconv.Atoi(sessionOrderValue.Text)
 				sessionSubmit := model.SessionSubmit{
-					SessionName: sessionNameValue.Text,
-					SessionKey:  sessionKeyValue.Text,
+					SessionName:  sessionNameValue.Text,
+					SessionKey:   sessionKeyValue.Text,
+					SessionOrder: int32(order),
 				}
 				err := t.handleSubmit(&sessionSubmit)
 				if err != nil {

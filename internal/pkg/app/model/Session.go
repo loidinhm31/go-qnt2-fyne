@@ -1,8 +1,9 @@
 package model
 
 type SessionSubmit struct {
-	SessionName string
-	SessionKey  string
+	SessionName  string
+	SessionKey   string
+	SessionOrder int32
 }
 
 type SessionItemSubmit struct {

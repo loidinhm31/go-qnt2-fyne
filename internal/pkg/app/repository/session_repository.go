@@ -13,6 +13,7 @@ type Session struct {
 	ID          string    `bson:"_id,omitempty" json:"id"`
 	SessionName string    `bson:"session_name" json:"session_name"`
 	SessionKey  string    `bson:"session_key" json:"session_key"`
+	Order       int32     `bson:"order" json:"order"`
 	CreatedAt   time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt   time.Time `bson:"updated_at" json:"updated_at"`
 }
@@ -53,6 +54,7 @@ func (mongo *mongoRepository) InsertSession(session *Session) error {
 	_, err := collection.InsertOne(context.TODO(), Session{
 		SessionName: session.SessionName,
 		SessionKey:  session.SessionKey,
+		Order:       session.Order,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	})

@@ -57,7 +57,7 @@ func (r *render) GetSessionProps() (map[string][]*repository.SessionItem, [][]in
 		return nil, nil
 	}
 	sort.Slice(sessions, func(i, j int) bool {
-		return sessions[i].CreatedAt.After(sessions[j].CreatedAt)
+		return sessions[i].Order > sessions[j].Order
 	})
 
 	// Get items for session from mongo
@@ -72,6 +72,7 @@ func (r *render) GetSessionProps() (map[string][]*repository.SessionItem, [][]in
 	slice = append(slice, []interface{}{
 		"ID1", // origin by session id
 		"ID2", // origin by item id
+		i18n.Messages["session_order"][config.GlobalConfig.Language],
 		i18n.Messages["delete_session"][config.GlobalConfig.Language],
 		i18n.Messages["session_name"][config.GlobalConfig.Language],
 		i18n.Messages["session_key"][config.GlobalConfig.Language],
@@ -101,12 +102,12 @@ func (r *render) GetSessionProps() (map[string][]*repository.SessionItem, [][]in
 
 				currentRow = append(currentRow, session.ID)
 				currentRow = append(currentRow, item.ID)
+				currentRow = append(currentRow, strconv.Itoa(int(session.Order)))
 				currentRow = append(currentRow, "") // delete session button
 				currentRow = append(currentRow, session.SessionName)
 				currentRow = append(currentRow, session.SessionKey)
 				currentRow = append(currentRow, item.Title)
 				currentRow = append(currentRow, item.Extension)
-
 				if index == 0 {
 					currentRow = append(currentRow, true)                       // add item button
 					currentRow = append(currentRow, strconv.Itoa(indexSession)) // delete item button (use with index for session)
@@ -120,6 +121,7 @@ func (r *render) GetSessionProps() (map[string][]*repository.SessionItem, [][]in
 			var currentRow []interface{}
 			currentRow = append(currentRow, session.ID)
 			currentRow = append(currentRow, "") // null item id
+			currentRow = append(currentRow, strconv.Itoa(int(session.Order)))
 			currentRow = append(currentRow, "") // delete session button
 			currentRow = append(currentRow, session.SessionName)
 			currentRow = append(currentRow, session.SessionKey)
